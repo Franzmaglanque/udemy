@@ -78,6 +78,8 @@ class User extends Authenticatable
             $voteQuestions->attach($question,['vote' => $vote]);
         }
 
+
+        // COUNT TOTAL VOTES AND UPDATE VOTES_COUNT IN QUESTION TABLE
         $question->load('votes');
         // $downVotes = $question->votes()->wherePivot('vote',-1)->sum('vote');
         // $upVotes   = $question->votes()->wherePivot('vote', 1)->sum('vote');
@@ -89,9 +91,48 @@ class User extends Authenticatable
     }
 
 
-    public function voteTest(Question $question){
-        return $question;
+    public function voteAnswer(Answer $answer,$vote)
+    {
+        $u1 = $this->voteAnswers();
+
+        //check if user/answer has existing vote record
+        if($u1->where('votable_id',$answer->id)->exists())
+        {
+            // Update Existing Record
+            $u1->updateExistingPivot($answer,['vote' => $vote]);
+        }else
+        {
+            // Create Record
+            $u1->attach($answer,['vote' => $vote]);
+        }
+
+
+         // COUNT TOTAL VOTES AND UPDATE VOTES_COUNT IN QUESTION TABLE
+        $answer->load('votes');
+        $upVotes = (int) $answer->upVote()->sum('vote');
+        $downVotes = (int) $answer->downVote()->sum('vote');
+        $answer->votes_count = $upVotes + $downVotes;
+        $answer->save();
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
