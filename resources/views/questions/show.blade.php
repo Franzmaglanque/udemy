@@ -18,68 +18,27 @@
                     <hr>
 
                     <div class="media">
-                        <div class="d-fex flex-column vote-controls">
-                            {{--  HTML button for  up vote --}}
-                            <a title="This question is useful" 
-                            class="vote-up {{Auth::guest() ? 'off' : ''}}"
-                            onclick="event.preventDefault(); document.getElementById('up-vote-question-{{ $question->id }}').submit();">
-                                <i class="fas fa-caret-up fa-3x"></i>
-                            </a>
-
-                            {{--  Hidden form for submmiting request and directing to update/create uri --}}
-                            <form id="up-vote-question-{{ $question->id }}" action="/questions/{{ $question->id }}/vote" method="POST" style="display:none;">
-                                @csrf
-                                <input type="hidden" value="1" name="vote">
-                            </form>
-
-                            {{--  HTML to display total count of votes --}}
-                            <span class="votes-count">{{$question->votes_count}}</span>
-
-                            {{--  HTML button for  Down vote --}}
-                            <a title="This question is not useful" 
-                            class="vote-down  {{Auth::guest() ? 'off' : ''}}"
-                            onclick="event.preventDefault(); document.getElementById('up-down-question-{{ $question->id }}').submit();">
+                        @include('shared._vote',[
+                            'model' => $question,
+                            'action' => "/questions/{{ $question->id }}/vote",
+                            'form_id' => 'up-vote-question-{{ $question->id }}',
+                            'has_favorite' => true,
                             
-                                <i class="fas fa-caret-down fa-3x"></i>
-                            </a>
-
-                            {{--  Hidden form for submmiting request and directing to update/create uri --}}
-                            <form id="up-down-question-{{ $question->id }}" action="/questions/{{ $question->id }}/vote" method="POST" style="display:none;">
-                                @csrf
-                                <input type="hidden" value="-1" name="vote">
-                            </form>
-
-
-                            <a title="Click to mark as favorite question (Click again to undo)" 
-                                class="favorite mt-2 {{ Auth::guest() ? 'off' : ($question->is_favorited ? 'favorited' : '') }}"
-                                
-                                {{-- onclick event to trigger submit button of favorite-question form --}}
-                                onclick="event.preventDefault(); document.getElementById('favorite-question-{{ $question->id }}').submit();"
-                                >
-                                <i class="fas fa-star fa-2x"></i>
-                                <span class="favorites-count">{{ $question->favorites_count }}</span>
-                            </a>
-                            {{-- {{$question->testfavorited}} --}}
-                            <form id="favorite-question-{{ $question->id }}" action="/questions/{{ $question->id }}/favorites" method="POST" style="display:none;">
-                                @csrf
-                                @if ($question->is_favorited)
-                                    @method ('DELETE')
-                                @endif
-                            </form>
-                        </div>
+                        ]);
                         <div class="media-body">
                             {!! $question->body_html !!}
-                            <div class="float-right">
-                                <span class="text-muted">Answered {{ $question->created_date }}</span>
-                                <div class="media mt-2">
-                                    <a href="{{ $question->user->url }}" class="pr-2">
-                                        <img src="{{ $question->user->avatar }}">
-                                    </a>
-                                    <div class="media-body mt-1">
-                                        <a href="{{ $question->user->url }}">{{ $question->user->name }}</a>
+                            {{-- <div class="float-right"> --}}
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        @include('shared._author',[
+                                            'model' => $question,
+                                            'label' => 'Asked'
+                                        ]);
                                     </div>
                                 </div>
-                            </div>
+                            {{-- </div> --}}
                         </div>
                     </div>
                 </div>
