@@ -43,7 +43,7 @@ class Question extends Model
 
     public function getBodyHtmlAttribute()
     {
-        return \Parsedown::instance()->text($this->body);
+        return $this->bodyHtml();
     }
 
     public function answers()
@@ -108,4 +108,21 @@ class Question extends Model
     {
         return $this->votes()->wherePivot('vote',1);
     }
+
+    public function getExcerpAttribute()
+    {
+        // return str_limit(strip_tags($this->bodyHtml()), 250);
+        return $this->excerp();
+    }
+
+    public function excerp($length)
+    {
+        return str_limit(strip_tags($this->bodyHtml()), $length);
+    }
+
+    private function bodyHtml()
+    {
+        return \Parsedown::instance()->text($this->body);
+    }
+
 }

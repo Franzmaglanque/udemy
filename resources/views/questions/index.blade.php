@@ -52,7 +52,9 @@
                                     <a href="{{ $question->user->url }}">{{ $question->user->name }}</a> 
                                     <small class="text-muted">{{ $question->created_date }}</small>
                                 </p>
-                                {{ str_limit($question->body, 250) }}
+                                
+                                {{-- <div class="excerp">{{ str_limit(strip_tags($question->body_html), 250) }}</div> --}}
+                                <div class="excerp">{{ $question->excerp(350) }}</div>
                             </div>                        
                         </div>
                         <hr>
