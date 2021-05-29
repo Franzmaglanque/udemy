@@ -15,7 +15,7 @@
                 <hr>
                 @include ('layouts._messages')
                 
-                @forelse ($answers as $answer)
+                @foreach ($answers as $answer)
                     <div class="media">
                         
                         {{-- include the _vote.blade.php which displays --}}
@@ -60,12 +60,8 @@
                         </div>
                     </div>
                     <hr>
-                    @empty($record)
-                        <div class="alert alert-warning">
-                            <strong>Sorry</strong>There are not questions available.
-                        </div>
-                    @endempty
-                @endforelse
+                 
+                @endforeach
             </div>
         </div>
     </div>
