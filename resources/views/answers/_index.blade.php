@@ -1,14 +1,21 @@
+@if($answersCount > 0)
 <div class="row mt-4">
-    <div class="col-md-12">
+    <div class="col-md-12"> 
         <div class="card">
             <div class="card-body">
-                <div class="card-title">
-                    <h2>{{ $answersCount . " " . str_plural('Answer', $answersCount) }}</h2>
-                </div>
+                
+            
+                
+                    <div class="card-title">
+                        
+                        <h2>{{ $answersCount . " " . str_plural('Answer', $answersCount) }}</h2>
+                    
+                    </div>
+                {{-- @endif --}}
                 <hr>
                 @include ('layouts._messages')
                 
-                @foreach ($answers as $answer)
+                @forelse ($answers as $answer)
                     <div class="media">
                         
                         {{-- include the _vote.blade.php which displays --}}
@@ -53,8 +60,14 @@
                         </div>
                     </div>
                     <hr>
-                @endforeach
+                    @empty($record)
+                        <div class="alert alert-warning">
+                            <strong>Sorry</strong>There are not questions available.
+                        </div>
+                    @endempty
+                @endforelse
             </div>
         </div>
     </div>
 </div>
+@endif
